@@ -17,7 +17,9 @@
 
 **Question:** How was it compiled?  
 - It was compiled with **PS2EXE** using the following command:  
+
 - Invoke-PS2EXE -inputFile '.\Message - Header Analyzer.ps1' -outputFile '.\Message - Header Analyzer.exe' -iconFile 'C:\GitHub\EmailHeaderAnalyzer\email_icon.ico' -noConsole -noOutput  
+
 - Source: **PS2EXE** https://github.com/MScholtes/PS2EXE
 <br>
 
