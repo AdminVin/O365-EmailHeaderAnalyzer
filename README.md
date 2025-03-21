@@ -13,6 +13,7 @@
 **Question:** Why have a mini program for something MxToolbox can do for free?  
 - I wanted a lightweight, fast program to pin to my taskbar for easy access while limiting the exposure of personal data.
 <br>
+
 **Question:** How was it compiled?  
 - It was compiled with **PS2EXE** using the following command:  
 - Invoke-PS2EXE -inputFile '.\Message - Header Analyzer.ps1' -outputFile '.\Message - Header Analyzer.exe' -iconFile 'C:\GitHub\EmailHeaderAnalyzer\email_icon.ico' -noConsole -noOutput  
