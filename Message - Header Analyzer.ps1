@@ -71,6 +71,7 @@ $txtHeaders.Multiline = $true
 $txtHeaders.ScrollBars = "Vertical"
 $txtHeaders.Size = New-Object System.Drawing.Size(560, 150)
 $txtHeaders.Location = New-Object System.Drawing.Point(10, 60)
+$txtHeaders.Add_Click({ $txtHeaders.Clear() })
 $form.Controls.Add($txtHeaders)
 
 $labels = @("Sender IP", "SPF", "DKIM", "DMARC", "O365 Classification", "Message Source")
