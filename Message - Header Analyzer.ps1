@@ -121,23 +121,45 @@ $form.add_FormClosed({
 function Get-ExternalSenderIP {
     param ($headers)
 
-    # Check for "Received:" lines first
+    # Check for "Received:" lines first (IPv4)
     $matches = [regex]::Matches($headers, "Received: from \S+ \((\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\)")
     if ($matches.Count -gt 0) {
         foreach ($match in $matches) {
             $ip = $match.Groups[1].Value
-            if ($ip -notmatch "^127\." -and $ip -notmatch "^10\." -and $ip -notmatch "^192\." -and $ip -notmatch "^172\." -and $ip -notmatch "^[a-fA-F0-9:]+$") {
+            if ($ip -notmatch "^127\." -and $ip -notmatch "^10\." -and $ip -notmatch "^192\." -and $ip -notmatch "^172\.") {
                 return $ip
             }
         }
     }
 
-    # Check for "Received-SPF:" lines if no IP was found
+    # Check for "Received:" lines first (IPv6)
+    $matches = [regex]::Matches($headers, "Received: from \S+ \(\[?([a-fA-F0-9:]+)\]?\)")
+    if ($matches.Count -gt 0) {
+        foreach ($match in $matches) {
+            $ip = $match.Groups[1].Value
+            if ($ip -notmatch "^::1$" -and $ip -notmatch "^fc00:" -and $ip -notmatch "^fd00:" -and $ip -notmatch "^fe80:") {
+                return $ip
+            }
+        }
+    }
+
+    # Check for "Received-SPF:" lines (IPv4)
     $matches = [regex]::Matches($headers, "Received-SPF: \S+ \((\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\)")
     if ($matches.Count -gt 0) {
         foreach ($match in $matches) {
             $ip = $match.Groups[1].Value
-            if ($ip -notmatch "^127\." -and $ip -notmatch "^10\." -and $ip -notmatch "^192\." -and $ip -notmatch "^172\." -and $ip -notmatch "^[a-fA-F0-9:]+$") {
+            if ($ip -notmatch "^127\." -and $ip -notmatch "^10\." -and $ip -notmatch "^192\." -and $ip -notmatch "^172\.") {
+                return $ip
+            }
+        }
+    }
+
+    # Check for "Received-SPF:" lines (IPv6)
+    $matches = [regex]::Matches($headers, "Received-SPF: \S+ \(\[?([a-fA-F0-9:]+)\]?\)")
+    if ($matches.Count -gt 0) {
+        foreach ($match in $matches) {
+            $ip = $match.Groups[1].Value
+            if ($ip -notmatch "^::1$" -and $ip -notmatch "^fc00:" -and $ip -notmatch "^fd00:" -and $ip -notmatch "^fe80:") {
                 return $ip
             }
         }
