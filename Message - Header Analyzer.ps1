@@ -17,7 +17,7 @@ $redCross = [char]::ConvertFromUtf32(0x274C)
 
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Email Header Analyzer"
-$form.Icon = [System.Drawing.Icon]::ExtractAssociatedIcon("C:\GitHub\EmailHeaderAnalyzer\email_icon.ico")
+#$form.Icon = [System.Drawing.Icon]::ExtractAssociatedIcon("C:\GitHub\EmailHeaderAnalyzer\email_icon.ico")
 $form.Size = New-Object System.Drawing.Size(600, 500)
 $form.StartPosition = "CenterScreen"
 #$form.TopMost = $true
