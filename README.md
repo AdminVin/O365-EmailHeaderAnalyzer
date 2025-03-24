@@ -1,5 +1,5 @@
 # Email - Header Analyzer
-<img src="https://github.com/AdminVin/EmailHeaderAnalyzer/blob/main/EmailHeaderAnalyzer-Screenshot.png">
+<img src="https://github.com/AdminVin/EmailHeaderAnalyzer/blob/main/EmailHeaderAnalyzer-Screenshot.png?raw=true">
 
 ## What is "Email - Header Analyzer"?
 **Email - Header Analyzer** is a lightweight PowerShell script designed to analyze Office 365 email headers and display the following information:
