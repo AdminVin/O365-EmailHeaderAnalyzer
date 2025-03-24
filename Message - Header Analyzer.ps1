@@ -93,6 +93,31 @@ foreach ($label in $labels) {
     $form.Controls.Add($txt)
     $textboxes[$label] = $txt
 
+    if ($label -eq "Sender IP") {
+        # Copy Button
+        $btnCopyIP = New-Object System.Windows.Forms.Button
+        $btnCopyIP.Text = "Copy"
+        $btnCopyIP.Size = New-Object System.Drawing.Size(50, 20)
+        $btnCopyIP.Location = New-Object System.Drawing.Point(280, $yPos)
+        $btnCopyIP.Add_Click({
+            [System.Windows.Forms.Clipboard]::SetText($textboxes["Sender IP"].Text)
+        })
+        $form.Controls.Add($btnCopyIP)
+    
+        # IP Info Button
+        $btnIPInfo = New-Object System.Windows.Forms.Button
+        $btnIPInfo.Text = "Info"
+        $btnIPInfo.Size = New-Object System.Drawing.Size(50, 20)
+        $btnIPInfo.Location = New-Object System.Drawing.Point(340, $yPos)
+        $btnIPInfo.Add_Click({
+            $ip = $textboxes["Sender IP"].Text
+            if ($ip -and $ip -ne "not found") {
+                Start-Process "https://ipinfo.io/$ip"
+            }
+        })
+        $form.Controls.Add($btnIPInfo)
+    }     
+
     if ($label -in @("SPF", "DKIM", "DMARC")) {
         $emojiLbl = New-Object System.Windows.Forms.Label
         $emojiLbl.Location = New-Object System.Drawing.Point(280, $yPos)
