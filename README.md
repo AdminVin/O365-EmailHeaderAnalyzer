@@ -25,3 +25,6 @@
 1. Run either `Message - Header Analyzer.ps1` or `Message - Header Analyzer.exe`.
 2. Set your internal domain and click **Save**.
 3. Paste message headers into the **Message Details** textbox.
+
+## Donate
+If this tool saved you time, consider sponsoring my next cup of coffee. [PayPal](https://www.paypal.com/donate/?hosted_button_id=EZU78ZANFT24C)
