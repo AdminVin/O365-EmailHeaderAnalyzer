@@ -18,7 +18,7 @@ $redCross = [char]::ConvertFromUtf32(0x274C)
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Email Header Analyzer"
 #$form.Icon = [System.Drawing.Icon]::ExtractAssociatedIcon("C:\GitHub\EmailHeaderAnalyzer\email_icon.ico")
-$form.Size = New-Object System.Drawing.Size(600, 500)
+$form.Size = New-Object System.Drawing.Size(600, 540)
 $form.StartPosition = "CenterScreen"
 #$form.TopMost = $true
 
@@ -74,7 +74,7 @@ $txtHeaders.Location = New-Object System.Drawing.Point(10, 60)
 $txtHeaders.Add_Click({ $txtHeaders.Clear() })
 $form.Controls.Add($txtHeaders)
 
-$labels = @("Sender IP", "SPF", "DKIM", "DMARC", "O365 Classification", "Message Source")
+$labels = @("Sender IP", "SPF", "DKIM", "DMARC", "Sender (Envelope)", "Sender (Header)", "O365 Classification", "Message Source")
 $textboxes = @{}
 $emojiLabels = @{}
 
@@ -88,6 +88,11 @@ foreach ($label in $labels) {
 
     $txt = New-Object System.Windows.Forms.TextBox
     $txt.Size = New-Object System.Drawing.Size(150, 20)
+    if ($label -eq "Sender (Envelope)" -or $label -eq "Sender (Header)") {
+        $txt.Size = New-Object System.Drawing.Size(450, 20)
+    } else {
+        $txt.Size = New-Object System.Drawing.Size(150, 20)
+    }
     $txt.Location = New-Object System.Drawing.Point(120, $yPos)
     $txt.ReadOnly = $true
     $form.Controls.Add($txt)
@@ -202,10 +207,15 @@ function Get-Headers {
     $spfStatus = if ($headers -match "spf=(pass|fail|softfail|neutral)") { $matches[1] } else { "Unknown" }
     $dkimStatus = if ($headers -match "dkim=(pass|fail|none)") { $matches[1] } else { "Unknown" }
     $dmarcStatus = if ($spfStatus -eq "pass" -and $dkimStatus -eq "pass") { "Compliant" } else { "Non-Compliant" }
+    $envelopeSender = if ($headers -match "Return-Path:\s*<?([^>\s]+)>?") { $matches[1].Trim() } else { "Not found" }
+    $headerSender = if ($headers -match "(?m)^From:\s*(.+)$") { $matches[1].Trim() } else { "Not found" }
+    
 
     $textboxes["SPF"].Text = $spfStatus
     $textboxes["DKIM"].Text = $dkimStatus
     $textboxes["DMARC"].Text = $dmarcStatus
+    $textboxes["Sender (Envelope)"].Text = $envelopeSender
+    $textboxes["Sender (Header)"].Text = $headerSender
 
     $emojiLabels["SPF"].Text = if ($spfStatus -eq "pass") { " $greenCheck" } else { " $redCross" }
     $emojiLabels["DKIM"].Text = if ($dkimStatus -eq "pass") { " $greenCheck" } else { " $redCross" }
@@ -226,13 +236,13 @@ function Get-Headers {
 
 $btnAnalyze = New-Object System.Windows.Forms.Button
 $btnAnalyze.Text = "Analyze"
-$btnAnalyze.Location = New-Object System.Drawing.Point(10, 420)
+$btnAnalyze.Location = New-Object System.Drawing.Point(10, 470)
 $btnAnalyze.Add_Click({ Get-Headers })
 $form.Controls.Add($btnAnalyze)
 
 $btnReset = New-Object System.Windows.Forms.Button
 $btnReset.Text = "Reset"
-$btnReset.Location = New-Object System.Drawing.Point(100, 420)
+$btnReset.Location = New-Object System.Drawing.Point(100, 470)
 $btnReset.Add_Click({
     $txtHeaders.Text = ""
     foreach ($key in $textboxes.Keys) { $textboxes[$key].Text = "" }

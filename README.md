@@ -6,6 +6,8 @@
 - **SPF** (Sender Policy Framework)
 - **DKIM** (DomainKeys Identified Mail)
 - **DMARC** (Domain-based Message Authentication, Reporting & Conformance)
+- **Sender (Envelope/Return Path)**
+- **Sender (Header/Client Display)**
 - **O365 Classification:** Internal / Internal (Partner) / External
 - **Message Source:** Internal / External
 
@@ -16,7 +18,7 @@
 
 **Question:** How was it compiled?  
 - It was compiled with **PS2EXE** using the following command:  
-- Invoke-PS2EXE -inputFile '.\Message - Header Analyzer.ps1' -outputFile '.\Message - Header Analyzer.exe' -iconFile 'C:\GitHub\EmailHeaderAnalyzer\email_icon.ico' -noConsole -noOutput  
+- Invoke-PS2EXE -inputFile '.\Message - Header Analyzer.ps1' -outputFile '.\Message - Header Analyzer.exe' -iconFile 'C:\GitHub\EmailHeaderAnalyzer\email_icon.ico' -noConsole -noOutput 
 - Source: **PS2EXE** https://github.com/MScholtes/PS2EXE
 
 ## Usage
