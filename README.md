@@ -6,8 +6,8 @@
 - **SPF** - pass / fail / softfail / neutral / Unknown
 - **DKIM** - pass / fail / none / Unknown
 - **DMARC** - Compliant / Non-Compliant
-- **Sender (Envelope/Return Path)** - Email Address / Not Found & Likely Spoofed or Spam
-- **Sender (Header/Client Display)** Email Address / Not Found & Likely Spoofed or Spam
+- **Sender (Envelope/Return Path)** - Email Address / NOT FOUND & Likely Spoofed or Spam
+- **Sender (Header/Client Display)** Email Address / NOT FOUND & Likely Spoofed or Spam
 - **O365 Classification:** Internal / Internal (Partner) / External
 - **Message Source:** Internal / External
 
