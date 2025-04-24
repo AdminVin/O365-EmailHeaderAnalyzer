@@ -207,8 +207,8 @@ function Get-Headers {
     $spfStatus = if ($headers -match "spf=(pass|fail|softfail|neutral)") { $matches[1] } else { "Unknown" }
     $dkimStatus = if ($headers -match "dkim=(pass|fail|none)") { $matches[1] } else { "Unknown" }
     $dmarcStatus = if ($spfStatus -eq "pass" -and $dkimStatus -eq "pass") { "Compliant" } else { "Non-Compliant" }
-    $envelopeSender = if ($headers -match "Return-Path:\s*<?([^>\s]+)>?") { $matches[1].Trim() } else { "Not found" }
-    $headerSender = if ($headers -match "(?m)^From:\s*(.+)$") { $matches[1].Trim() } else { "Not found" }
+    $envelopeSender = if ($headers -match "Return-Path:\s*<?([^>\s]+)>?") { $matches[1].Trim() } else { "NOT FOUND & Likely Spoofed or Spam" }
+    $headerSender = if ($headers -match "(?m)^From:\s*(.+)$") { $matches[1].Trim() } else { "NOT FOUND & Likely Spoofed or Spam" }
     
 
     $textboxes["SPF"].Text = $spfStatus

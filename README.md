@@ -3,11 +3,11 @@
 
 ## What is "Email - Header Analyzer"?
 **Email - Header Analyzer** is a lightweight PowerShell script designed to analyze Office 365 email headers and display the following information:
-- **SPF** (Sender Policy Framework)
-- **DKIM** (DomainKeys Identified Mail)
-- **DMARC** (Domain-based Message Authentication, Reporting & Conformance)
-- **Sender (Envelope/Return Path)**
-- **Sender (Header/Client Display)**
+- **SPF** - pass / fail / softfail / neutral / Unknown
+- **DKIM** - pass / fail / none / Unknown
+- **DMARC** - Compliant / Non-Compliant
+- **Sender (Envelope/Return Path)** - Email Address / Not Found & Likely Spoofed or Spam
+- **Sender (Header/Client Display)** Email Address / Not Found & Likely Spoofed or Spam
 - **O365 Classification:** Internal / Internal (Partner) / External
 - **Message Source:** Internal / External
 
