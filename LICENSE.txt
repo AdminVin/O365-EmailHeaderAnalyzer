@@ -1,0 +1,17 @@
+OPEN USE, NO RESALE LICENSE
+
+You are free to:
+- Use this project for personal or internal business purposes.
+- Modify or adapt it for your own use.
+- Share it freely without charge.
+
+You are NOT permitted to:
+- Sell, resell, or bundle this code or derivatives for commercial purposes.
+- Distribute this project or derivatives for profit.
+
+This project is intended to be free for all.
+
+If you would like to support the project, donations are welcome at:
+https://www.paypal.com/donate/?hosted_button_id=EZU78ZANFT24C
+
+© AdminVin 2025. All rights reserved.
