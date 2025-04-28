@@ -27,4 +27,4 @@
 3. Paste message headers into the **Message Details** textbox.
 
 ## Donate
-Saved you time? Sponsor my next coffee? [PayPal](https://www.paypal.com/donate/?hosted_button_id=EZU78ZANFT24C)
+Saved you time? Great! --- Sponsor my next coffee? [PayPal](https://www.paypal.com/donate/?hosted_button_id=EZU78ZANFT24C)
