@@ -18,8 +18,8 @@
 
 **Question:** How was it compiled?  
 - It was compiled with **PS2EXE** using the following command:  
-- Invoke-PS2EXE -inputFile '.\Message - Header Analyzer.ps1' -outputFile '.\Message - Header Analyzer.exe' -iconFile '.\email_icon.ico' -noConsole -noOutput 
-- Source: **PS2EXE** https://github.com/MScholtes/PS2EXE
+- `Invoke-PS2EXE -inputFile '.\O365-MessageHeaderAnalyzer.ps1' -outputFile '.\O365-MessageHeaderAnalyzer.exe' -iconFile '.\email_icon.ico' -noConsole -noOutput` 
+- Source: [PS2EXE GitHub](https://github.com/MScholtes/PS2EXE)
 
 ## Usage
 1. Run either `Message - Header Analyzer.ps1` or `Message - Header Analyzer.exe`.
