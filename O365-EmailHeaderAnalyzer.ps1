@@ -1,16 +1,3 @@
-#> Internal Domain
-$appDataPath = [System.IO.Path]::Combine($env:AppData, "AV", "EmailAnalyzer")
-$configFile = [System.IO.Path]::Combine($appDataPath, "config.txt")
-if (!(Test-Path -Path $appDataPath)) {
-    New-Item -ItemType Directory -Path $appDataPath -Force
-}
-if (Test-Path -Path $configFile) {
-    $InternalDomain = Get-Content -Path $configFile -Raw
-} else {
-    $InternalDomain = "gmail.com"
-}
-
-
 #> Functions
 function Get-ExternalSenderIP {
     param ($headers)
@@ -72,42 +59,10 @@ function Get-Headers {
     $dkimStatus = if ($headers -match "dkim=(pass|fail|none)") { $matches[1] } else { "Unknown" }
     $dmarcStatus = if ($spfStatus -eq "pass" -and $dkimStatus -eq "pass") { "Compliant" } else { "Non-Compliant" }
 
-    # Sender (Auth)
-    $senderAuth = "NOT FOUND"
-    if ($headers -match "(?m)^Sender:\s*(.+)$") {
-        $senderAuth = $matches[1].Trim()
-        if ($senderAuth -match "<(.+?)>") {
-            $senderAuth = $matches[1]
-        }
-    } elseif ($headers -match "(?m)^From:\s*(.+)$") {
-        $senderAuth = $matches[1].Trim()
-        if ($senderAuth -match "<(.+?)>") {
-            $senderAuth = $matches[1]
-        }
-    }
-
-    # Sender (Envelope)
-    $envelopeSender = if ($headers -match "Return-Path:\s*<?([^>\s]+)>?") {
-        $matches[1].Trim()
-    } else {
-        "NOT FOUND & Likely Spoofed or Spam"
-    }
-
-    # Sender (Header)
-    $headerSender = "NOT FOUND & Likely Spoofed or Spam"
-    if ($headers -match "(?m)^From:\s*(.+)$") {
-        $headerSender = $matches[1].Trim()
-        if ($headerSender -match "<(.+?)>") {
-            $headerSender = $matches[1]
-        }
-    }
 
     $textboxes["SPF"].Text = $spfStatus
     $textboxes["DKIM"].Text = $dkimStatus
     $textboxes["DMARC"].Text = $dmarcStatus
-    $textboxes["Sender (Auth)"].Text = $senderAuth
-    $textboxes["Sender (Envelope)"].Text = $envelopeSender
-    $textboxes["Sender (Header)"].Text = $headerSender
 
     $emojiLabels["SPF"].Text = if ($spfStatus -eq "pass") { " $greenCheck" } else { " $redCross" }
     $emojiLabels["DKIM"].Text = if ($dkimStatus -eq "pass") { " $greenCheck" } else { " $redCross" }
@@ -124,8 +79,44 @@ function Get-Headers {
     }
     $textboxes["O365 Classification"].Text = $classification
     $textboxes["Message Source"].Text = $classification
-}
 
+    # Sender (Auth)
+    $senderAuth = "NOT FOUND (Potentially Spoofed/Spam/Phishing)"
+    if ($headers -match "(?m)^Sender:\s*(.+)$") {
+        $senderAuth = $matches[1].Trim()
+        if ($senderAuth -match "<(.+?)>") {
+            $senderAuth = $matches[1]
+        }
+    } elseif ($headers -match "(?m)^From:\s*(.+)$") {
+        $senderAuth = $matches[1].Trim()
+        if ($senderAuth -match "<(.+?)>") {
+            $senderAuth = $matches[1]
+        }
+    }
+    if ($headers -match "X-MS-Exchange-Organization-AuthAs:\s*Anonymous") {
+        $senderAuth += " (Unauthenticated / Likely Spoofed)"
+        }
+    $textboxes["Sender (Auth)"].Text = $senderAuth
+
+
+    # Sender (Envelope / Return Path)
+    $envelopeSender = if ($headers -match "Return-Path:\s*<?([^>\s]+)>?") {
+        $matches[1].Trim()
+    } else {
+        "NOT FOUND (Potentially Spoofed/Spam/Phishing)"
+    }
+    $textboxes["Sender (Envelope)"].Text = $envelopeSender
+
+    # Sender (Header / Outlook)
+    $headerSender = "NOT FOUND (Potentially Spoofed/Spam/Phishing)"
+    if ($headers -match "(?m)^From:\s*(.+)$") {
+        $headerSender = $matches[1].Trim()
+        if ($headerSender -match "<(.+?)>") {
+            $headerSender = $matches[1]
+        }
+    }
+    $textboxes["Sender (Header)"].Text = $headerSender
+}
 
 #> GUI 
 Add-Type -AssemblyName System.Windows.Forms
@@ -135,36 +126,13 @@ $redCross = [char]::ConvertFromUtf32(0x274C)
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "O365 - Email Header Analyzer (AdminVin)"
 #$form.Icon = [System.Drawing.Icon]::ExtractAssociatedIcon("C:\GitHub\O365-EmailHeaderAnalyzer\email_icon.ico")
-$form.Size = New-Object System.Drawing.Size(600, 570)
+$form.Size = New-Object System.Drawing.Size(600, 540)
 $form.StartPosition = "CenterScreen"
 #$form.TopMost = $true
 
-$lblInternalDomain = New-Object System.Windows.Forms.Label
-$lblInternalDomain.Text = "Internal Domain:"
-$lblInternalDomain.Location = New-Object System.Drawing.Point(10, 10)
-$lblInternalDomain.AutoSize = $true
-$form.Controls.Add($lblInternalDomain)
-
-$txtInternalDomain = New-Object System.Windows.Forms.TextBox
-$txtInternalDomain.Size = New-Object System.Drawing.Size(150, 20)
-$txtInternalDomain.Location = New-Object System.Drawing.Point(120, 10)
-$txtInternalDomain.Text = $InternalDomain
-$form.Controls.Add($txtInternalDomain)
-
-$btnSave = New-Object System.Windows.Forms.Button
-$btnSave.Text = "Save"
-$btnSave.Location = New-Object System.Drawing.Point(280, 8)
-$btnSave.Add_Click({
-    if (!(Test-Path -Path $appDataPath)) {
-        New-Item -ItemType Directory -Path $appDataPath -Force
-    }
-    $txtInternalDomain.Text | Out-File -FilePath $configFile -Encoding UTF8
-})
-$form.Controls.Add($btnSave)
-
 $lblMessageDetails = New-Object System.Windows.Forms.Label
 $lblMessageDetails.Text = "Message Details:"
-$lblMessageDetails.Location = New-Object System.Drawing.Point(10, 40)
+$lblMessageDetails.Location = New-Object System.Drawing.Point(10, 10)
 $lblMessageDetails.AutoSize = $true
 $form.Controls.Add($lblMessageDetails)
 
@@ -172,7 +140,7 @@ $form.Controls.Add($lblMessageDetails)
 
 $btnPaste = New-Object System.Windows.Forms.Button
 $btnPaste.Size = New-Object System.Drawing.Size(30, 25)
-$btnPaste.Location = New-Object System.Drawing.Point(540, 35)
+$btnPaste.Location = New-Object System.Drawing.Point(540, 5)
 $btnPaste.Font = New-Object System.Drawing.Font("Segoe UI Emoji", 12)
 $btnPaste.Text = [char]::ConvertFromUtf32(0x1F4CB)
 $btnPaste.Add_Click({
@@ -187,7 +155,7 @@ $txtHeaders = New-Object System.Windows.Forms.TextBox
 $txtHeaders.Multiline = $true
 $txtHeaders.ScrollBars = "Vertical"
 $txtHeaders.Size = New-Object System.Drawing.Size(560, 150)
-$txtHeaders.Location = New-Object System.Drawing.Point(10, 60)
+$txtHeaders.Location = New-Object System.Drawing.Point(10, 30)
 $txtHeaders.Add_Click({ $txtHeaders.Clear() })
 $form.Controls.Add($txtHeaders)
 
@@ -195,7 +163,7 @@ $labels = @("Sender IP", "SPF", "DKIM", "DMARC", "Sender (Auth)", "Sender (Envel
 $textboxes = @{}
 $emojiLabels = @{}
 
-$yPos = 230
+$yPos = 200
 foreach ($label in $labels) {
     $lbl = New-Object System.Windows.Forms.Label
     $lbl.Text = "${label}:"
@@ -272,23 +240,19 @@ $form.add_FormClosed({
 
 $btnAnalyze = New-Object System.Windows.Forms.Button
 $btnAnalyze.Text = "Analyze"
-$btnAnalyze.Location = New-Object System.Drawing.Point(10, 500)
+$btnAnalyze.Location = New-Object System.Drawing.Point(10, 470)
 $btnAnalyze.Add_Click({ Get-Headers })
 $form.Controls.Add($btnAnalyze)
 
 $btnReset = New-Object System.Windows.Forms.Button
 $btnReset.Text = "Reset"
-$btnReset.Location = New-Object System.Drawing.Point(100, 500)
+$btnReset.Location = New-Object System.Drawing.Point(100, 470)
 $btnReset.Add_Click({
     $txtHeaders.Text = ""
     foreach ($key in $textboxes.Keys) { $textboxes[$key].Text = "" }
     foreach ($key in $emojiLabels.Keys) { $emojiLabels[$key].Text = "" }
 })
 $form.Controls.Add($btnReset)
-
-$txtInternalDomain.Add_TextChanged({
-    $script:InternalDomain = $txtInternalDomain.Text
-})
 
 $txtHeaders.Add_KeyDown({
     param ($sender, $e)
