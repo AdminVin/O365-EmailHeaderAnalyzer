@@ -7,7 +7,6 @@
 - **DKIM** - Results: pass / fail / none / Unknown
 - **DMARC** - Results: Compliant / Non-Compliant
 - **Sender (Authenticated)** - Email Address / NOT FOUND (Potentially Spoofed/Spam/Phishing)
-    [Use this address for O365 Compliance Search Address]
 - **Sender (Envelope/Return Path)** - Email Address / NOT FOUND (Potentially Spoofed/Spam/Phishing)
 - **Sender (Header/Client Display)** - Email Address / NOT FOUND (Potentially Spoofed/Spam/Phishing)
 - **O365 Classification:** Internal / Internal (Partner) / External
