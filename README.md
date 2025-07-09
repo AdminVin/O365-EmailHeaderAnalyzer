@@ -12,6 +12,8 @@
 - **O365 Classification:** Internal / Internal (Partner) / External
 - **Message Source:** Internal / External
 
+Clicking on "Info" will take you to IPINFO.IO, and display all relevant information to the IP Address.
+
 
 ## Why create this and have a compiled version?
 **Question:** Why have a mini program for something MxToolbox can do for free?  
