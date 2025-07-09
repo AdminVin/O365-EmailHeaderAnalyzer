@@ -24,9 +24,11 @@ Clicking on "Info" will take you to IPINFO.IO, and display all relevant informat
 - `Invoke-PS2EXE -inputFile '.\O365-EmailHeaderAnalyzer.ps1' -outputFile '.\O365-EmailHeaderAnalyzer.exe' -iconFile '.\email_icon.ico' -noConsole -noOutput` 
 - Source: [PS2EXE GitHub](https://github.com/MScholtes/PS2EXE)
 
+
 ## Usage
 1. Run either `Message - Header Analyzer.ps1` or `Message - Header Analyzer.exe`.
 2. Paste message headers into the **Message Details** textbox.
+
 
 ## Donate
 Saved you time? Great! --- Sponsor my next coffee? [PayPal](https://www.paypal.com/donate/?hosted_button_id=EZU78ZANFT24C)
