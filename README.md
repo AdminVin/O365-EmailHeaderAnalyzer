@@ -6,7 +6,8 @@
 - **SPF** - Results: pass / fail / softfail / neutral / Unknown
 - **DKIM** - Results: pass / fail / none / Unknown
 - **DMARC** - Results: Compliant / Non-Compliant
-- **Sender (Authenticated)** - Email Address / NOT FOUND (Potentially Spoofed/Spam/Phishing)
+- **Subject** - Displays the MIME Encoded subject line [Accurate O365 Compliance Searching]
+- **Sender (Authenticated)** - Email Address / NOT FOUND (Potentially Spoofed/Spam/Phishing) [Accurate O365 Compliance Searching]
 - **Sender (Envelope/Return Path)** - Email Address / NOT FOUND (Potentially Spoofed/Spam/Phishing)
 - **Sender (Header/Client Display)** - Email Address / NOT FOUND (Potentially Spoofed/Spam/Phishing)
 - **O365 Classification:** Internal / Internal (Partner) / External

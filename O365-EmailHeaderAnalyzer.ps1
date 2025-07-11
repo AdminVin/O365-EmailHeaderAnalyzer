@@ -80,6 +80,19 @@ function Get-Headers {
     $textboxes["O365 Classification"].Text = $classification
     $textboxes["Message Source"].Text = $classification
 
+    # Subject (raw MIME-safe, compliance copy/paste)
+    $subject = "ERROR / NOT FOUND"
+    if ($headers -match "(?m)^Subject:\s*(.+)$") {
+        $rawSubject = $matches[1].Trim()
+        if ($rawSubject -match "^\=\?utf-8\?q\?(.+?)\?=$") {
+            # Extract without decoding, preserve underscores
+            $subject = $matches[1]
+        } else {
+            $subject = $rawSubject
+        }
+    }
+    $textboxes["Subject (Header)"].Text = $subject
+
     # Sender (Auth)
     $senderAuth = "NOT FOUND (Potentially Spoofed/Spam/Phishing)"
     if ($headers -match "(?m)^Sender:\s*(.+)$") {
@@ -126,7 +139,7 @@ $redCross = [char]::ConvertFromUtf32(0x274C)
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "O365 - Email Header Analyzer (AdminVin)"
 #$form.Icon = [System.Drawing.Icon]::ExtractAssociatedIcon("C:\GitHub\O365-EmailHeaderAnalyzer\email_icon.ico")
-$form.Size = New-Object System.Drawing.Size(600, 540)
+$form.Size = New-Object System.Drawing.Size(600, 580)
 $form.StartPosition = "CenterScreen"
 #$form.TopMost = $true
 
@@ -159,7 +172,7 @@ $txtHeaders.Location = New-Object System.Drawing.Point(10, 30)
 $txtHeaders.Add_Click({ $txtHeaders.Clear() })
 $form.Controls.Add($txtHeaders)
 
-$labels = @("Sender IP", "SPF", "DKIM", "DMARC", "Sender (Auth)", "Sender (Envelope)", "Sender (Header)", "O365 Classification", "Message Source")
+$labels = @("Sender IP", "SPF", "DKIM", "DMARC", "Subject (Header)", "Sender (Auth)", "Sender (Envelope)", "Sender (Header)", "O365 Classification", "Message Source")
 $textboxes = @{}
 $emojiLabels = @{}
 
@@ -173,7 +186,7 @@ foreach ($label in $labels) {
 
     $txt = New-Object System.Windows.Forms.TextBox
     $txt.Size = New-Object System.Drawing.Size(150, 20)
-    if ($label -in @("Sender (Envelope)", "Sender (Header)", "Sender (Auth)")) {
+    if ($label -in @("Subject (Header)", "Sender (Auth)","Sender (Envelope)", "Sender (Header)")) {
         $txt.Size = New-Object System.Drawing.Size(450, 20)
     } else {
         $txt.Size = New-Object System.Drawing.Size(150, 20)
@@ -240,13 +253,13 @@ $form.add_FormClosed({
 
 $btnAnalyze = New-Object System.Windows.Forms.Button
 $btnAnalyze.Text = "Analyze"
-$btnAnalyze.Location = New-Object System.Drawing.Point(10, 470)
+$btnAnalyze.Location = New-Object System.Drawing.Point(10, 505)
 $btnAnalyze.Add_Click({ Get-Headers })
 $form.Controls.Add($btnAnalyze)
 
 $btnReset = New-Object System.Windows.Forms.Button
 $btnReset.Text = "Reset"
-$btnReset.Location = New-Object System.Drawing.Point(100, 470)
+$btnReset.Location = New-Object System.Drawing.Point(100,505)
 $btnReset.Add_Click({
     $txtHeaders.Text = ""
     foreach ($key in $textboxes.Keys) { $textboxes[$key].Text = "" }
