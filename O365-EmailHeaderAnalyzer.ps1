@@ -137,7 +137,7 @@ $greenCheck = [char]::ConvertFromUtf32(0x2705)
 $redCross = [char]::ConvertFromUtf32(0x274C)
 
 $form = New-Object System.Windows.Forms.Form
-$form.Text = "O365 - Email Header Analyzer (AdminVin)"
+$form.Text = "O365 - Email Header Analyzer"
 #$form.Icon = [System.Drawing.Icon]::ExtractAssociatedIcon("C:\GitHub\O365-EmailHeaderAnalyzer\email_icon.ico")
 $form.Size = New-Object System.Drawing.Size(600, 580)
 $form.StartPosition = "CenterScreen"
