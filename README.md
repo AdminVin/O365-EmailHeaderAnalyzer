@@ -5,7 +5,7 @@
 **Email - Header Analyzer** is a lightweight PowerShell script designed to analyze Office 365 email headers and display the following information:
 - **SPF** - Results: pass / fail / softfail / neutral / Unknown
 - **DKIM** - Results: pass / fail / none / Unknown
-- **DMARC** - Results: Compliant / Non-Compliant
+- **DMARC** - Explicit recorded result: Compliant (pass) / Non-Compliant (fail) / none / temperror / permerror / bestguesspass / Unknown
 - **Subject** - Displays the MIME Encoded subject line [Accurate O365 Compliance Searching]
 - **Sender (Authenticated)** - Email Address / NOT FOUND (Potentially Spoofed/Spam/Phishing) [Accurate O365 Compliance Searching]
 - **Sender (Envelope/Return Path)** - Email Address / NOT FOUND (Potentially Spoofed/Spam/Phishing)
@@ -14,6 +14,10 @@
 - **Message Source:** Internal / External
 
 Clicking on "Info" will take you to IPINFO.IO, and display all relevant information to the IP Address.
+
+Authentication fields report the supplied `Authentication-Results` header; they do not independently verify the message. SPF and DKIM also preserve recorded error results. A pass alone does not establish alignment with the visible From domain. Hover over the authentication fields for recorded identities and details. Missing or multiple authentication headers produce Unknown; repeated results for a method also produce Unknown for that method. A question mark indicates an indeterminate or non-pass/non-fail result. ARC results are not used.
+
+Regression checks (Windows PowerShell with Windows Forms): `powershell.exe -NoProfile -STA -File .\tests\Authentication.Tests.ps1`. Optionally supply `-SamplePath` pointing to the original reported message headers to check that specific regression; private headers are not stored in the repository.
 
 
 ## Why create this and have a compiled version?
