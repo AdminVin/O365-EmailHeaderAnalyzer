@@ -211,7 +211,7 @@ function Get-Headers {
     }
     $authToolTip.SetToolTip($textboxes['O365 Classification'], "Reported transport authentication class: $authAs. This does not establish the author's identity or physical message origin.")
     $source = Get-SingleHeader $fields 'X-MS-Exchange-CrossTenant-FromEntityHeader'
-    $textboxes['Message Source'].Text = switch ($source) { Internet {'Internet'} Hosted {'Hosted'} HybridOnPrem {'HybridOnPrem'} default {'Unknown'} }
+    $textboxes['Message Source'].Text = switch ($source) { Internet {'EXTERNAL'} Hosted {'Hosted'} HybridOnPrem {'HybridOnPrem'} default {'Unknown'} }
     $authToolTip.SetToolTip($textboxes['Message Source'], "Reported CrossTenant-FromEntityHeader: $source. Independent of AuthAs; unverified header claim.")
 
     # Keep the complete unfolded MIME representation for header/compliance searches.
@@ -297,6 +297,7 @@ foreach ($label in $labels) {
     }
     $txt.Location = New-Object System.Drawing.Point(120, $yPos)
     $txt.ReadOnly = $true
+    $txt.Font = New-Object System.Drawing.Font($txt.Font, [System.Drawing.FontStyle]::Bold)
     $form.Controls.Add($txt)
     $textboxes[$label] = $txt
 
